@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七夕告白信笺 - 用代码表达你的爱</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a0229 0%, #2c0345 50%, #4a0770 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ff7ae5, #a25bff, #5b8cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .date {
+            font-size: 1.2rem;
+            color: #d89aff;
+            margin-bottom: 30px;
+        }
+        
+        .heart-btn {
+            background: linear-gradient(45deg, #ff4e8c, #ff2e78);
+            border: none;
+            border-radius: 50px;
+            padding: 18px 45px;
+            font-size: 1.4rem;
+            color: white;
+            cursor: pointer;
+            margin: 30px 0;
+            box-shadow: 0 10px 25px rgba(255, 46, 120, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            outline: none;
+        }
+        
+        .heart-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 46, 120, 0.6);
+        }
+        
+        .heart-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(255, 46, 120, 0.4);
+        }
+        
+        .message {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: left;
+            line-height: 1.8;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .message h2 {
+            color: #ff9ee5;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .code-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            display: none;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .code-container pre {
+            color: #7affd7;
+            line-height: 1.5;
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff7ae5, #ff4e8c);
+            transform: rotate(45deg);
+            opacity: 0;
+            animation: fall 5s linear infinite;
+        }
+        
+        .heart:before, .heart:after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff7ae5, #ff4e8c);
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .heart:before {
+            top: -10px;
+            left: 0;
+        }
+        
+        .heart:after {
+            top: 0;
+            left: -10px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fall {
+            0% {
+                top: -50px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .heart-btn {
+                padding: 15px 30px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container">
+        <header>
+            <h1>七夕告白信笺</h1>
+            <p class="subtitle">用代码编织爱的语言</p>
+            <p class="date">农历七月初七 · 中国情人节</p>
+        </header>
+        
+        <button class="heart-btn" id="showMessage">打开我的告白</button>
+        
+        <div class="message" id="message">
+            <h2>致我最爱的人：</h2>
+            <p>在这个浪漫的七夕之夜，我想用程序员的方式表达我的心意。</p>
+            <p>如果爱情是一段代码，那你就是我生命中最完美的算法。每一次心跳，都是你在我生命中留下的痕迹；每一个微笑，都是你编译出的最美程序。</p>
+            <p>我愿用一生的时间，与你一起编写幸福的未来，排除所有bug，让我们的爱情程序永远运行下去。</p>
+            <p>七夕快乐，我的爱人！</p>
+        </div>
+        
+        <div class="code-container" id="codeContainer">
+            <pre>
+# 我们的爱情代码
+def our_love():
+    while True:
+        I.hand = your.hand
+        I.heart = your.heart
+        I.eyes = your.eyes
+        our.future = bright
+        
+        if distance.between(us):
+            I.wait(you)
+        elif sadness.in(your.heart):
+            I.comfort(you)
+        else:
+            I.hold(you.tight)
+            
+        return forever.together()
+
+# 执行我们的爱情
+our_love()
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showMessageBtn = document.getElementById('showMessage');
+            const message = document.getElementById('message');
+            const codeContainer = document.getElementById('codeContainer');
+            const heartsContainer = document.getElementById('hearts');
+            
+            // 创建漂浮的爱心
+            function createHearts() {
+                setInterval(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                    heart.style.transform = `scale(${Math.random() * 0.5 + 0.5}) rotate(45deg)`;
+                    
+                    heartsContainer.appendChild(heart);
+                    
+                    // 移除爱心元素以避免内存泄漏
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 5000);
+                }, 300);
+            }
+            
+            // 显示消息和代码
+            showMessageBtn.addEventListener('click', function() {
+                message.style.display = 'block';
+                codeContainer.style.display = 'block';
+                this.style.display = 'none';
+                
+                // 添加一些爱心动画
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.classList.add('heart');
+                        
+                        heart.style.left = Math.random() * 100 + 'vw';
+                        heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                        heart.style.transform = `scale(${Math.random() * 0.8 + 0.8}) rotate(45deg)`;
+                        
+                        heartsContainer.appendChild(heart);
+                        
+                        setTimeout(() => {
+                            heart.remove();
+                        }, 4000);
+                    }, i * 100);
+                }
+            });
+            
+            createHearts();
+        });
+    </script>
+</body>
+</html>
